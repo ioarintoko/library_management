@@ -4,12 +4,12 @@ namespace Tests\Unit;
 
 use App\Models\Author;
 use App\Models\Book;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class AuthorTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     /** @test */
     public function an_author_can_be_created_with_valid_attributes()

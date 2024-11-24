@@ -18,10 +18,10 @@ class BookFactory extends Factory
     {
         return [
             //
-            'title' => fake()->name(),
-            'description' => 'author',
-            'publishdate' => now(),
-            'authorid' => 1
+            'title' => $this->faker->sentence,
+            'description' =>  $this->faker->text(255),
+            'publishdate' => $this->faker->date(),
+            'authorid' => \App\Models\Author::factory(), // Automatically associate an author
         ];
     }
 }

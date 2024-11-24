@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Author;
 
 class AuthorSeeder extends Seeder
 {
@@ -12,9 +12,8 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $this->timestamps = false;
-        \App\Models\Author::factory()
+        // Create 50 authors using the factory
+        Author::factory()
             ->count(50)
             ->create();
     }

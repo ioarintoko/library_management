@@ -18,8 +18,8 @@ class AuthorFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'bio' => 'author',
-            'birthdate' => now()
+            'bio' => $this->faker->sentence,
+            'birthdate' => $this->faker->date('Y-m-d', '2000-01-01'),
         ];
     }
 }

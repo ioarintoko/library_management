@@ -13,7 +13,6 @@ class BookSeeder extends Seeder
     public function run(): void
     {
         //
-        $this->timestamps = false;
         \App\Models\Book::factory()
         ->count(50)
         ->create();

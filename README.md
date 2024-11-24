@@ -143,8 +143,8 @@ This project is a RESTful API for managing authors and books in a library system
    - One-to-many relationship between authors and books (one author can write many books).
 
 2. **Database Schema:**
-   - `authors`: `id`, `name`, `bio`, `birth_date`
-   - `books`: `id`, `title`, `description`, `publish_date`, `authorid` (foreign key)
+   - `authors`: `id`, `name`, `bio`, `birthdate`
+   - `books`: `id`, `title`, `description`, `publishdate`, `authorid` (foreign key)
 
 3. **Caching Strategy:**
    - The **GET** requests for authors and books will be cached to reduce database load.

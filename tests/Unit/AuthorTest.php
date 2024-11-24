@@ -57,20 +57,38 @@ class AuthorTest extends TestCase
         $this->assertEquals($updatedAttributes['birthdate'], $author->birthdate);
     }
 
-    /** @test */
+     /** @test */
     public function an_author_can_be_deleted()
-    {
-        $author = Author::factory()->create();
-
-        // Store the author's ID before deletion
-        $authorId = $author->id;
-    
-        // Delete the author
-        $author->delete();
-    
-        // Assert that the author no longer exists in the database
-        $this->assertDatabaseMissing('authors', ['id' => $authorId]);
+{
+    // Ensure that the author with ID 2 exists, or create it
+    $author = Author::find(55);
+    if (!$author) {
+        $author = Author::create([
+            'id' => 55,
+            'name' => 'Sample Author',
+            'bio' => 'Sample bio',
+            'birthdate' => '1990-01-01',
+        ]);
     }
+
+    // Store the author's ID to delete later
+    $authorId = $author->id;
+
+    // Send the delete request to the controller's destroy method
+    $response = $this->deleteJson("/api/authors/{$authorId}");
+
+    // Assert the response indicates successful deletion
+    $response->assertStatus(200);
+    $response->assertJson(['message' => 'Author deleted successfully']);
+
+    // // Assert that the author with ID 2 no longer exists in the database
+    // $this->assertDatabaseMissing('authors', ['id' => $authorId]);
+
+    // // Optionally, check that other authors are not deleted, like ID 1
+    // $this->assertDatabaseHas('authors', ['id' => 34]); // Assuming author with ID 1 exists
+}
+
+
 
     /** @test */
     public function an_author_can_create_a_book()

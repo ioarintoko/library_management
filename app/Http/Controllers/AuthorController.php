@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Author;
 use App\Http\Resources\AuthorResource;
-use Illuminate\Http\Response;use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class AuthorController extends Controller
 {
-    //
     public function show($id)
     {
-        // Fetch the book by ID or return a 404 if not found
-        $author = Author::find($id);
+        // Check if the author data is cached
+        $author = Cache::remember("author_{$id}", 60, function () use ($id) {
+            return Author::find($id);
+        });
 
         if (!$author) {
             return response()->json(['message' => 'author not found'], Response::HTTP_NOT_FOUND);
@@ -25,20 +28,18 @@ class AuthorController extends Controller
 
     public function getBooks($id)
     {
-        $author = Author::find($id);
+        // Check if the books by author are cached
+        $books = Cache::remember("author_{$id}_books", 60, function () use ($id) {
+            $author = Author::with('books')->find($id);
+            return $author ? $author->books : null;
+        });
 
-        if (!$author) {
-            return response()->json(['message' => 'author not found'], Response::HTTP_NOT_FOUND);
-        } else {
-            $books = $author->books;
-            
-            if (!$books) {
-                return response()->json(['message' => 'books not found'], Response::HTTP_NOT_FOUND);
-            }
-    
-            // Return the books resource
-            return new AuthorResource($books);
+        if (!$books) {
+            return response()->json(['message' => 'books not found'], Response::HTTP_NOT_FOUND);
         }
+
+        // Return the books resource
+        return response()->json($books);
     }
 
     public function store(Request $request)
@@ -62,6 +63,9 @@ class AuthorController extends Controller
             'bio' => $request->input('bio'),
             'birthdate' => $request->input('birthdate'),
         ]);
+
+        // Clear cache for authors
+        Cache::forget('authors_list');
 
         return response()->json([
             'message' => 'Author created successfully',
@@ -90,6 +94,9 @@ class AuthorController extends Controller
         // Update the author details
         $author->update($validated);
 
+        // Clear cache for this author
+        Cache::forget("author_{$id}");
+
         // Return a success response with updated author data
         return response()->json([
             'message' => 'Author updated successfully',
@@ -97,23 +104,35 @@ class AuthorController extends Controller
         ], 200);
     }
 
-    public function destroy($id)
-    {
-        // Find the author by ID
-        $author = Author::find($id);
+public function destroy($id)
+{
+    // Check if the author is in cache
+    $cachedAuthor = Cache::get("author_{$id}");
 
-        if (!$author) {
-            return response()->json([
-                'message' => 'Author not found',
-            ], 404);
-        }
-
-        // Delete the author
-        $author->delete();
-
-        // Return a success response
-        return response()->json([
-            'message' => 'Author deleted successfully',
-        ], 200);
+    // If found in cache, delete it first
+    if ($cachedAuthor) {
+        Cache::forget("author_{$id}");
     }
+
+    // Find the author by ID
+    $author = Author::find($id);
+
+    if (!$author) {
+        return response()->json([
+            'message' => 'Author not found',
+        ], 404);
+    }
+
+    // Delete the author
+    $author->delete();
+
+    // Clear cache for this author
+    Cache::forget("author_{$id}");
+
+    // Return a success response
+    return response()->json([
+        'message' => 'Author deleted successfully',
+    ], 200);
+}
+
 }

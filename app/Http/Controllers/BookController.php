@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Http\Resources\BookResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class BookController extends Controller
 {
-    //
     public function show($id)
     {
-        // Fetch the book by ID or return a 404 if not found
-        $book = Book::find($id);
+        // Check if the book data is cached
+        $book = Cache::remember("book_{$id}", 60, function () use ($id) {
+            return Book::find($id);
+        });
 
         if (!$book) {
             return response()->json(['message' => 'Book not found'], Response::HTTP_NOT_FOUND);
@@ -35,6 +37,9 @@ class BookController extends Controller
 
         // Create the book
         $book = Book::create($validated);
+
+        // Clear cache for books list or specific book
+        Cache::forget('books_list');
 
         // Return a response
         return response()->json([
@@ -65,6 +70,9 @@ class BookController extends Controller
         // Update the book with validated data
         $book->update($validated);
 
+        // Clear cache for this book
+        Cache::forget("book_{$id}");
+
         // Return a response
         return response()->json([
             'message' => 'Book updated successfully',
@@ -85,6 +93,9 @@ class BookController extends Controller
 
         // Delete the book
         $book->delete();
+
+        // Clear cache for this book
+        Cache::forget("book_{$id}");
 
         // Return a success response
         return response()->json([

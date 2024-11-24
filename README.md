@@ -130,7 +130,7 @@ This project is a RESTful API for managing authors and books in a library system
 
 ## Performance Tuning
 ### Database Query Optimization
-- Indexing frequently queried fields (e.g., `author_id` in the books table) improves the speed of read operations.
+- Indexing frequently queried fields (e.g., `authorid` in the books table) improves the speed of read operations.
 - Using `Eager Loading` to avoid N+1 query issues.
 
 ### Caching
@@ -144,7 +144,7 @@ This project is a RESTful API for managing authors and books in a library system
 
 2. **Database Schema:**
    - `authors`: `id`, `name`, `bio`, `birth_date`
-   - `books`: `id`, `title`, `description`, `publish_date`, `author_id` (foreign key)
+   - `books`: `id`, `title`, `description`, `publish_date`, `authorid` (foreign key)
 
 3. **Caching Strategy:**
    - The **GET** requests for authors and books will be cached to reduce database load.

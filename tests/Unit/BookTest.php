@@ -50,4 +50,60 @@ class BookTest extends TestCase
         $this->assertEquals($author->id, $bookAuthor->id);
         $this->assertEquals($author->name, $bookAuthor->name);
     }
+
+    /** @test */
+    public function a_book_can_be_updated()
+    {
+        // Arrange
+        $author = Author::factory()->create();
+        $book = Book::factory()->create(['authorid' => $author->id]);
+
+        $updatedAttributes = [
+            'title' => 'Updated Book Title',
+            'description' => 'Updated book description.',
+            'publishdate' => '2024-02-01',
+        ];
+
+        // Act
+        $book->update($updatedAttributes);
+
+        // Assert
+        $this->assertDatabaseHas('books', $updatedAttributes);
+        $this->assertEquals($updatedAttributes['title'], $book->title);
+        $this->assertEquals($updatedAttributes['description'], $book->description);
+        $this->assertEquals($updatedAttributes['publishdate'], $book->publishdate);
+    }
+
+    /** @test */
+public function a_book_can_be_deleted()
+{
+    // Arrange
+    $author = Author::factory()->create();
+    $book = Book::factory()->create(['authorid' => $author->id]);
+
+    // Act
+    $bookId = $book->id;
+    $book->delete();
+
+    // Assert
+    $this->assertDatabaseMissing('books', ['id' => $bookId]); // Check that the book is no longer in the database
 }
+
+
+     /** @test */
+     public function a_book_cannot_be_created_with_invalid_attributes()
+     {
+         // Arrange: Invalid attributes
+         $attributes = [
+             'title' => '', // Invalid
+             'authorid' => null, // Invalid
+         ];
+ 
+         // Act
+         $response = $this->json('POST', route('books.store'), $attributes);
+ 
+         // Assert
+         $response->assertStatus(422); // Validation error
+         $response->assertJsonValidationErrors(['title', 'authorid']);
+     }
+ }

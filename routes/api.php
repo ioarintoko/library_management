@@ -26,7 +26,7 @@ Route::get('/books', function () {
 
 Route::get('/books/{id}', [BookController::class, 'show']);
 
-Route::post('/books', [BookController::class, 'store']);
+Route::post('/books', [BookController::class, 'store'])->name('books.store');
 
 Route::put('/books/{id}', [BookController::class, 'update']);
 

@@ -1,66 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Library Management System API
 
-## About Laravel
+## Overview
+This project is a RESTful API for managing authors and books in a library system. It is implemented using **PHP** and the **Laravel Framework**, designed with clean code practices, efficient database design, and optimized performance.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
+### Authors
+- Retrieve a list of all authors.
+- Retrieve details of a specific author.
+- Create a new author.
+- Update an existing author.
+- Delete an author.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Books
+- Retrieve a list of all books.
+- Retrieve details of a specific book.
+- Create a new book.
+- Update an existing book.
+- Delete a book.
 
-## Learning Laravel
+### Associations
+- Retrieve all books by a specific author.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Technologies Used
+- **Language:** PHP
+- **Framework:** Laravel
+- **Database:** MySQL
+- **Testing Framework:** PHPUnit
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prerequisites
+- PHP 7.4+
+- Composer installed
+- MySQL installed
 
-### Premium Partners
+### Setup Instructions
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/yourusername/library-management-system.git
+   cd library-management-system
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+2. **Install Dependencies:**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Configure the Database:**
+   - Copy the `.env.example` file to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Update the database credentials in the `.env` file:
+     ```env
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=library_app
+     DB_USERNAME=root
+     DB_PASSWORD=yourpassword
+     ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Run Migrations:**
+   This command will create the database tables based on the migrations:
+   ```bash
+   php artisan migrate
+   ```
 
-## Code of Conduct
+5. **Seed the Database:**
+   Seed the database with sample data using:
+   ```bash
+   php artisan db:seed --class=AuthorSeeder
+   php artisan db:seed --class=BookSeeder
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Start the Server:**
+   Run the Laravel development server:
+   ```bash
+   php artisan serve
+   ```
+   Now, the application is accessible at `http://localhost:8000`
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## API Endpoints
+
+### Authors
+- **GET** `/authors` - Retrieve a list of all authors.
+- **GET** `/authors/{id}` - Retrieve details of a specific author.
+- **POST** `/authors` - Create a new author.
+- **PUT** `/authors/{id}` - Update an existing author.
+- **DELETE** `/authors/{id}` - Delete an author.
+
+### Books
+- **GET** `/books` - Retrieve a list of all books.
+- **GET** `/books/{id}` - Retrieve details of a specific book.
+- **POST** `/books` - Create a new book.
+- **PUT** `/books/{id}` - Update an existing book.
+- **DELETE** `/books/{id}` - Delete a book.
+
+### Associations
+- **GET** `/authors/{id}/books` - Retrieve all books by a specific author.
+
+---
+
+## Unit Tests
+
+### Running Tests
+1. **Ensure Database is Seeded:**
+   Before running the tests, ensure that the database is seeded with sample data:
+   ```bash
+   php artisan db:seed --class=AuthorSeeder
+   php artisan db:seed --class=BookSeeder
+   ```
+
+2. **Run the test suite:**
+   ```bash
+   ./vendor/bin/phpunit
+   ```
+
+---
+
+## Performance Tuning
+### Database Query Optimization
+- Indexing frequently queried fields (e.g., `author_id` in the books table) improves the speed of read operations.
+- Using `Eager Loading` to avoid N+1 query issues.
+
+### Caching
+- Implement caching for the **GET** endpoints for books and authors using Laravel’s built-in caching system. This will help improve response times for frequent requests, reducing the need for repeated database queries.
+
+---
+
+## Design Choices
+1. **Model Relationships:**
+   - One-to-many relationship between authors and books (one author can write many books).
+
+2. **Database Schema:**
+   - `authors`: `id`, `name`, `bio`, `birth_date`
+   - `books`: `id`, `title`, `description`, `publish_date`, `author_id` (foreign key)
+
+3. **Caching Strategy:**
+   - The **GET** requests for authors and books will be cached to reduce database load.
+
+4. **Performance Considerations:**
+   - As the number of books and authors grows, pagination will be necessary for the `/books` and `/authors` endpoints to avoid loading all records at once.
+
+---
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
